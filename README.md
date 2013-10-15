@@ -1,0 +1,4 @@
+jquery-valideasy
+================
+
+jQuery Valideasy
