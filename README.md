@@ -15,6 +15,12 @@ Never write complex JS script again to handle your form validation rules! With V
 ## Table of Contents
 
 - [Setup](#setup)
+- [Options](#options)
+- [Markup](#markup)
+- [Rules](#rules)
+- [Error Handling](#error-handling)
+      - [Default Error Messages](#default-error-messages)
+      - [Customize Error Messages](#customize-error-messages)
 
 # Setup
 
@@ -79,6 +85,8 @@ Set to true to auto scroll to the first error field at the end of the validation
   
 </form>
 ```
+
+[![TOC](http://i.imgur.com/RDbarNr.png)](#table-of-contents)
 
 ## Rules
 
@@ -163,6 +171,8 @@ To indicate the other field, use the `data-error-{lowerthan or greaterthan}` att
 ```
 
 The `data-error-lowerthan` attribute is used to specify in which element the error message should be inserted.
+
+[![TOC](http://i.imgur.com/RDbarNr.png)](#table-of-contents)
 
 ## Error Handling
 
