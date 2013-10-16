@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------------
-	Class: validateForm
+	Class: valideasy
 	Use: Checks wether a submitted form is valid.
 	Author: Vincent Ballut
 	Version: 1.0
