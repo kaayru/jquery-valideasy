@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jQuery Valideasy : HTML based form validation" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>jQuery Valideasy</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/kaayru/jquery-valideasy">View on GitHub</a>
+
+          <h1 id="project_title">jQuery Valideasy</h1>
+          <h2 id="project_tagline">HTML based form validation</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/kaayru/jquery-valideasy/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/kaayru/jquery-valideasy/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="jquery-valideasy-" class="anchor" href="#jquery-valideasy-"><span class="octicon octicon-link"></span></a>jQuery Valideasy </h1>
+
+<p>Never write complex JS script again to handle your form validation rules! With Valideasy, everything's done via HTML attributes added to your form fields.</p>
+
+<p><strong>License:</strong> GPL<br><strong>Support:</strong> All modern browsers, IE7+  </p>
+
+<h3>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h3>
+
+<ul>
+<li>Easy to use</li>
+<li>(almost) No JS code required</li>
+<li>Several validation rules supported : email, phone, html...</li>
+<li>Customizable error messages</li>
+</ul><h2>
+<a name="table-of-contents" class="anchor" href="#table-of-contents"><span class="octicon octicon-link"></span></a>Table of Contents</h2>
+
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#options">Options</a></li>
+<li><a href="#markup">Markup</a></li>
+<li><a href="#rules">Rules</a></li>
+<li>
+<a href="#error-handling">Error Handling</a>
+
+<ul>
+<li><a href="#default-error-messages">Default Error Messages</a></li>
+<li><a href="#customize-error-messages">Customize Error Messages</a></li>
+</ul>
+</li>
+</ul><h1>
+<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a>Setup</h1>
+
+<ul>
+<li>Load latest <a href="http://code.jquery.com/jquery-2.0.3.min.js">jQuery</a> library</li>
+<li>Load <code>js/jquery-valideasy.min.js</code>
+</li>
+<li>Instantiate Valideasy on your form :</li>
+</ul><div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'form'</span><span class="p">).</span><span class="nx">submit</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">formIsValid</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">valideasy</span><span class="p">(</span> <span class="p">{</span><span class="nx">options</span><span class="p">}</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="nx">formIsValid</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+
+<p><a href="#table-of-contents"><img src="http://i.imgur.com/RDbarNr.png" alt="TOC"></a></p>
+
+<h2>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">mode</span><span class="o">:</span> <span class="s1">'single'</span><span class="p">,</span>
+  <span class="nx">errorElementId</span><span class="o">:</span> <span class="s1">'errors'</span><span class="p">,</span>
+  <span class="nx">disableFieldStyle</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">stepByStep</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">scrollToFirstError</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>
+<a name="mode" class="anchor" href="#mode"><span class="octicon octicon-link"></span></a>mode</h3>
+
+<p>How error messages are displayed.</p>
+
+<ul>
+<li>
+<strong>single:</strong> each message is located near its field</li>
+<li>
+<strong>unified:</strong> all messages at the same place, one at a time</li>
+</ul><h3>
+<a name="errorelementid" class="anchor" href="#errorelementid"><span class="octicon octicon-link"></span></a>errorElementId</h3>
+
+<p>Indicates the ID of the field(s) supposed to display error messages.</p>
+
+<ul>
+<li>in <strong>single</strong> mode, the error message will be inserted in the element with ID {field_id}<em>{errorElementId}. For example: name</em>errors</li>
+<li>in <strong>unified</strong> mode, all the error messages will be inserted in the same element, with specified ID {errorElementId}.</li>
+</ul><h3>
+<a name="disablefieldstyle" class="anchor" href="#disablefieldstyle"><span class="octicon octicon-link"></span></a>disableFieldStyle</h3>
+
+<p>Set to true to stop adding the .error class to fields with errors</p>
+
+<h3>
+<a name="stepbystep" class="anchor" href="#stepbystep"><span class="octicon octicon-link"></span></a>stepByStep</h3>
+
+<p>Set to true to stop validation at first error</p>
+
+<h3>
+<a name="scrolltofirsterror" class="anchor" href="#scrolltofirsterror"><span class="octicon octicon-link"></span></a>scrollToFirstError</h3>
+
+<p>Set to true to auto scroll to the first error field at the end of the validation process</p>
+
+<p><a href="#table-of-contents"><img src="http://i.imgur.com/RDbarNr.png" alt="TOC"></a></p>
+
+<h2>
+<a name="markup" class="anchor" href="#markup"><span class="octicon octicon-link"></span></a>Markup</h2>
+
+<ul>
+<li>Validation rules are specified in the class attribute of the field</li>
+<li>Default value of the field must be specified both in the value attribute and in the title attribute</li>
+<li>In <strong>single</strong> mode, an element with the ID <code>{fieldId}_{errorElementId}</code> and class <code>.error-wrapper</code> should be placed somewhere in the page. Any error message triggered by this field will be inserted in that element.</li>
+<li>In <strong>unified</strong> mode, an element with the ID <code>{errorElementId}</code> and class <code>.error-wrapper</code> should be placed somewhere in the page. The first error message triggered by a field in the form will be placed in that element.</li>
+</ul><div class="highlight highlight-html"><pre><span class="nt">&lt;form</span> <span class="na">novalidate</span> <span class="na">action=</span><span class="s">"/"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"{rules}"</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">title=</span><span class="s">"Name"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Name"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"name_errors"</span> <span class="na">class=</span><span class="s">"error-wrapper"</span><span class="nt">&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
+
+<p><a href="#table-of-contents"><img src="http://i.imgur.com/RDbarNr.png" alt="TOC"></a></p>
+
+<h2>
+<a name="rules" class="anchor" href="#rules"><span class="octicon octicon-link"></span></a>Rules</h2>
+
+<h3>
+<a name="required" class="anchor" href="#required"><span class="octicon octicon-link"></span></a>Required</h3>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"required"</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">title=</span><span class="s">"Name"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Name"</span> <span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;select</span> <span class="na">class=</span><span class="s">"required"</span> <span class="na">id=</span><span class="s">"gender"</span> <span class="na">title=</span><span class="s">"Select..."</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">selected=</span><span class="s">"selected"</span> <span class="na">value=</span><span class="s">"0"</span><span class="nt">&gt;</span>Select…<span class="nt">&lt;/option&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"monsieur"</span><span class="nt">&gt;</span>Mr.<span class="nt">&lt;/option&gt;</span>
+    <span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"madame"</span><span class="nt">&gt;</span>Mrs.<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;/select&gt;</span>
+</pre></div>
+
+<p><strong>Important</strong> For this rule to work, the default value or option MUST be placed in the <code>title</code> attribute.</p>
+
+<h3>
+<a name="email" class="anchor" href="#email"><span class="octicon octicon-link"></span></a>Email</h3>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"email"</span> <span class="na">id=</span><span class="s">"email"</span> <span class="na">title=</span><span class="s">"Your Email"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Your Email"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<h3>
+<a name="telephone" class="anchor" href="#telephone"><span class="octicon octicon-link"></span></a>Telephone</h3>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"phone"</span> <span class="na">id=</span><span class="s">"phone"</span> <span class="na">title=</span><span class="s">"Your Phone Number"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Your Phone Number"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>Accepts spaces, dashes and points</p>
+
+<h3>
+<a name="number" class="anchor" href="#number"><span class="octicon octicon-link"></span></a>Number</h3>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"number"</span> <span class="na">id=</span><span class="s">"price"</span> <span class="na">title=</span><span class="s">"Price"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Price"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>Accepts spaces, dashes and points</p>
+
+<h3>
+<a name="integer" class="anchor" href="#integer"><span class="octicon octicon-link"></span></a>Integer</h3>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"integer"</span> <span class="na">id=</span><span class="s">"price"</span> <span class="na">title=</span><span class="s">"Price"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Price"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>Only digit.</p>
+
+<h3>
+<a name="url" class="anchor" href="#url"><span class="octicon octicon-link"></span></a>URL</h3>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"url"</span> <span class="na">id=</span><span class="s">"Website"</span> <span class="na">title=</span><span class="s">"Website"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Website"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<h3>
+<a name="zipcode" class="anchor" href="#zipcode"><span class="octicon octicon-link"></span></a>Zipcode</h3>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"zip"</span> <span class="na">id=</span><span class="s">"postcode"</span> <span class="na">title=</span><span class="s">"Postcode"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Postcode"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<h3>
+<a name="at-least-one-field-required" class="anchor" href="#at-least-one-field-required"><span class="octicon octicon-link"></span></a>At least one field required</h3>
+
+<p>Allows to specifiy that, in a set of fields, at least one is required.
+All of the fields in the set must have the same <code>data-error-grouprequired</code> attribute.</p>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"grouprequired"</span> <span class="na">id=</span><span class="s">"areamin"</span> <span class="na">title=</span><span class="s">"Mininum Area"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Minimum Area"</span> <span class="na">data-error-grouprequired=</span><span class="s">"area"</span> <span class="na">data-error-fieldid=</span><span class="s">"area_errors"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"grouprequired"</span> <span class="na">id=</span><span class="s">"areamax"</span> <span class="na">title=</span><span class="s">"Maximum Area"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Maximum Area"</span> <span class="na">data-error-grouprequired=</span><span class="s">"area"</span> <span class="na">data-error-fieldid=</span><span class="s">"area_errors"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"area_errors"</span> <span class="na">class=</span><span class="s">"error-wrapper"</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+
+<p>The <code>data-error-fieldid</code> attribute is used to specify in which element the error message should be inserted.</p>
+
+<h3>
+<a name="values-comparison--lower-than-ou-greater-than" class="anchor" href="#values-comparison--lower-than-ou-greater-than"><span class="octicon octicon-link"></span></a>Values comparison : lower than ou greater than</h3>
+
+<p>Allows to specify that the value of the field must be lower or greater than the value of another field.
+To indicate the other field, use the <code>data-error-{lowerthan or greaterthan}</code> attribute.</p>
+
+<div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"lowerthan"</span> <span class="na">id=</span><span class="s">"minprice"</span> <span class="na">title=</span><span class="s">"Minimum Price"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Minimum Price"</span> <span class="na">data-error-lowerthan=</span><span class="s">"pricemax"</span> <span class="na">data-error-fieldid=</span><span class="s">"price_errors"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">"pricemax"</span> <span class="na">title=</span><span class="s">"Maximum Price"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Maximum Price"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"price_errors"</span> <span class="na">class=</span><span class="s">"error-wrapper"</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+
+<p>The <code>data-error-lowerthan</code> attribute is used to specify in which element the error message should be inserted.</p>
+
+<p><a href="#table-of-contents"><img src="http://i.imgur.com/RDbarNr.png" alt="TOC"></a></p>
+
+<h2>
+<a name="error-handling" class="anchor" href="#error-handling"><span class="octicon octicon-link"></span></a>Error Handling</h2>
+
+<p>When a field fails at validating a rule, the <code>.error</code> class is added to it, and will be remove on the next click on the field.</p>
+
+<h3>
+<a name="default-error-messages" class="anchor" href="#default-error-messages"><span class="octicon octicon-link"></span></a>Default Error Messages</h3>
+
+<p>Each validation rule comes with a default error message:</p>
+
+<ul>
+<li>required : <em>The field {field title} is required.</em>
+</li>
+<li>email: <em>Invalid email adress.</em>
+</li>
+<li>phone: <em>Invalid phone number.</em>
+</li>
+<li>url: <em>Invalid URL.</em>
+</li>
+<li>number: <em>The field {field title} must be numeric.</em>
+</li>
+<li>integer: <em>The field {field title} must be numeric.</em>
+</li>
+<li>zip: <em>Invalid postcode.</em>
+</li>
+<li>grouprequired: <em>At least one field required.</em>
+</li>
+<li>lowerthan: <em>{field 1 title} must be lower than {field 2 title}.</em>
+</li>
+<li>greaterthan: <em>{field 1 title} must be greater than {field 2 title}.</em>
+</li>
+</ul><h3>
+<a name="customize-error-messages" class="anchor" href="#customize-error-messages"><span class="octicon octicon-link"></span></a>Customize Error Messages</h3>
+
+<p>Two ways to customize error messages :</p>
+
+<ul>
+<li>
+<strong>Modify the "field title" used in the message:</strong> To change the field name used in the default message, use the <code>data-error-fieldname</code> attribute. </li>
+</ul><div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"required"</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">title=</span><span class="s">"Your name"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Your name"</span> <span class="na">data-error-fieldname=</span><span class="s">"Name"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>Message : <code>The field &lt;span class="fieldname"&gt;Name&lt;/span&gt; is required.</code></p>
+
+<ul>
+<li>
+<strong>Specify a whole new message:</strong> To completly change the error message associated to a validation rule of a field, add an attribute <code>data-error-message-{rule}</code> containing the desired message.</li>
+</ul><div class="highlight highlight-html"><pre>  <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"required"</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">title=</span><span class="s">"Your name"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">value=</span><span class="s">"Your name"</span> <span class="na">data-error-message-required=</span><span class="s">"This field is required"</span> <span class="nt">/&gt;</span>
+</pre></div>
+
+<p>Message : <code>This field is required</code></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jQuery Valideasy maintained by <a href="https://github.com/kaayru">kaayru</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
