@@ -473,6 +473,12 @@ section#toc ul li li a {
 .error-wrapper .fieldname {
   font-weight: bold;
 }
+
+.example input.error,
+.example textarea.error {
+  border-color: red;
+  color: red;
+}
 /*******************************************************************************
 Small Device Styles
 *******************************************************************************/
@@ -526,3 +532,9 @@ Small Device Styles
   }
 
 }
+
+@media screen and (max-width: 1140px) {
+  #toc {
+    display: none;
+  }
+}  
