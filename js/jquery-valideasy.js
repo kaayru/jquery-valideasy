@@ -1,16 +1,17 @@
 /* ------------------------------------------------------------------------
-	Class: valideasy
-	Use: Checks wether a submitted form is valid.
-	Author: Vincent Ballut
-	Version: 1.0
-	Dependency: jQuery 1.9.1
+    Class: valideasy
+    Use: Checks wether a submitted form is valid.
+    Author: Vincent Ballut
+    Version: 2
+    Dependency: jQuery 1.9.1
 ------------------------------------------------------------------------- */
 
-(function($) {
+(function ($, doc, win) {
+    var name = 'valideasy';
 
-    validationMethods = ["required", "grouprequired", "integer", "number", "email", "url", "zip", "phone", "lowerthan", "greaterthan"];
+    var validationMethods = ["required", "grouprequired", "integer", "number", "email", "url", "zip", "phone", "lowerthan", "greaterthan"];
 
-    patterns = {
+    var patterns = {
         integer:/^\d+$/,
         date:/^((0?\d)|(1[012]))[\/-]([012]?\d|30|31)[\/-]\d{1,4}$/, 
         email:/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
@@ -25,7 +26,7 @@
         nonHtml:/^[^<>]*$/
     };
 
-    messages = {
+    var messages = {
         required: "The field {field} is required.",
         grouprequired: "At least one field required.",
         integer: "The field {field} must be numeric.",
@@ -38,185 +39,247 @@
         zip: "Invalid postcode."
     }
 
-    $.fn.validateForm = function(params) { 
-        params = $.extend( {
+    function Valideasy(form, opts) {
+        this.$form = $(form);
+
+        this.defaults = {
             // Display mode : single | unified
             // - Single : Each error message will be displayed next to their field.
             // - Unified : Each error message will be displayed at the same place (specified by errorElementId)
             // Defaults to : single
-            mode: "single",
+            mode: 'single',
+
             // ID of the element(s) containing the error message
             // Defaults to : "errors"
-            errorElementId: "errors",
+            errorElementId: 'errors',
+
             // Disable styling of error fields ?
             // Defaults to : false
             disableFieldStyle: false,
+
             // Stop at first error met ?
             // Defaults to : false
             stepByStep: false,
+
             // If form has errors, scroll to the first error section ?
             // Defaults to : false
             scrollToFirstError: false
-        }, params);
+        };
+        this.opts = $.extend(this.defaults, opts);
+        this.$form.data(name, this);
+        this.formHasError = false;
+        this.activeErrorElements = new Array();
+    };
 
-        formElement = $(this);
-        formHasError = false;
-        activeErrorElements = new Array();
-        
-        formElement.find("input, select, textarea").each(function() {
-            element = $(this);
-            defaultValue = element.attr('title');
+    Valideasy.prototype.init = function () {
+        this.setParams();
+        var self = this;
 
-            errorElement = getErrorElement(params.mode, element, params.errorElementId);
-            
-            value = element.val();
+        this.$form.find("input:not([type=submit]), select, textarea").each(function() {
+            var element = new elementBeingValidated($(this), self);
 
-            for(var i in validationMethods) {
-                method = validationMethods[i];
-
-                if(element.hasClass(method)) {
-                    
-                    if(method == 'required') { 
-                    	
-                        check = (element.val() == '' || element.val() == defaultValue || element.find('option:selected').text() == defaultValue);
-                    
-                    } else if(method == 'lowerthan' || method == 'greaterthan') {
-
-                        relatedElement = $('#' + element.attr('data-error-' + method));
-                        relatedValue = parseInt(cleanNumber(relatedElement.val()));
-                        value = parseInt(cleanNumber(value));
-                    	
-                        if(relatedElement && relatedElement && patterns['number'].test(relatedValue+value)) {
-                            if(method == 'lowerthan') {
-                                check = ((value > relatedValue) && value != defaultValue);
-                            } else {
-                                check = ((value < relatedValue) && value != defaultValue);
-                            }
-                        }
-                    } else if(method == "grouprequired") {
-                        elementsRequired = $('[data-error-grouprequired="' + element.attr('data-error-grouprequired') + '"]');
-                    	
-                        check = true;
-                        elementsRequired.each(function() {
-                            if(!($(this).val() == '' || $(this).val() == $(this).attr('title') == true)) {
-                                check = false;
-                                return;
-                            }
-                    		
-                        });
-                    } else {
-                    	
-                        pattern = patterns[method];
-                        
-                        check = (!pattern.test(value) && value != defaultValue);
-                    }
-
-                    if(check) {
-                    	
-                        if(jQuery.inArray(errorElement, activeErrorElements) <= -1) {
-                            setError(params.mode, errorElement, element, method, params.disableFieldStyle);
-                            activeErrorElements.push(errorElement.attr('id'));
-                        }
-                    	
-                        formHasError = true;            	
-                        
-                        if(params.stepByStep) {
-                            return false;
-                        }
-                        break;
-                        
-                    } else {
-                        if(jQuery.inArray(errorElement.attr('id'), activeErrorElements) <= -1)
-                            unsetError(params.mode, errorElement, element, params.disableFieldStyle);
-                    	
-                    }
+            if(!(self.opts.stepByStep && self.formHasError)) {
+                if(!element.validate()) {
+                    self.formHasError = true;
                 }
             }
+
         });
-        
-        if(formHasError && params.scrollToFirstError) {            
+
+        if(this.formHasError && this.opts.scrollToFirstError) {            
             $('html,body').animate({
-                scrollTop: $('.error-wrapper:visible').first().parents().first().offset().top
+                scrollTop: this.$form.find('.error-wrapper:visible').first().parents().first().offset().top
             }, 'slow');
         }
-        
-        return !formHasError;
+        return this;
     };
+
+    Valideasy.prototype.setParams = function() {
+        if(this.$form.attr('data-valideasy-mode')) {
+            this.opts.mode = this.$form.attr('data-valideasy-mode');
+        }
+
+        if(this.$form.attr('data-valideasy-errorelementid')) {
+            this.opts.errorElementId = this.$form.attr('data-valideasy-errorelementid');
+        }
+
+        if(this.$form.attr('data-valideasy-disablefieldstyle')) {
+            this.opts.disableFieldStyle = this.$form.attr('data-valideasy-disablefieldstyle');
+        }
+
+        if(this.$form.attr('data-valideasy-stepbystep')) {
+            this.opts.stepByStep = this.$form.attr('data-valideasy-stepbystep');
+        }
+
+        if(this.$form.attr('data-valideasy-scrolltofirsterror')) {
+            this.opts.scrollToFirstError = this.$form.attr('data-valideasy-scrolltofirsterror');
+        }
+
+        return this;
+    };
+
+    Valideasy.prototype.isValid = function() {
+        return !this.formHasError;
+    }
+    
+
+    function elementBeingValidated(element, valideasy) {
+
+        this.$el = element;
+        this.valideasy = valideasy;
+        this.$form = valideasy.$form;
+        this.opts = valideasy.opts;
+
+        this.defaultValue = this.$el.attr('title');
+        this.value = this.$el.val();
+        this.errorElement = this.getErrorElement();
+        this.method = '';
+    }
+
+    elementBeingValidated.prototype.getErrorElement = function () {
+        if(this.$el.attr('data-error-fieldid')) { 
+            errorElement = $('#' + this.$el.attr('data-error-fieldid'));
+        } else {
+            if(this.opts.mode == 'single') {
+                errorElement = $('#' + this.$el.attr('id')+"_"+this.opts.errorElementId);
+            } else {
+                errorElement = $('#' + this.opts.errorElementId);
+            }
+        }
+
+        return errorElement;
+    };
+
+    elementBeingValidated.prototype.validate = function() { 
+        var check = true;
+
+        for(var i in validationMethods) {
+            this.method = validationMethods[i];
+
+            if(this.$el.hasClass(this.method)) {
+                
+                if(this.method == 'required') { 
+                    
+                    check = (this.$el.val() == '' || this.$el.val() == this.defaultValue || this.$el.find('option:selected').text() == this.defaultValue);
+
+                } else if(this.method == 'lowerthan' || this.method == 'greaterthan') {
+
+                    var relatedElement = $('#' + this.$el.attr('data-error-' + this.method));
+                    var relatedValue = parseInt(cleanNumber(relatedElement.val()));
+                    this.value = parseInt(cleanNumber(this.value));
+                    
+                    if(relatedElement && patterns['number'].test(relatedValue+this.value) && this.value != this.defaultValue) {
+                        if(this.method == 'lowerthan') {
+                            check = (this.value > relatedValue);
+                        } else {
+                            check = (this.value < relatedValue);
+                        }
+                    } else {
+                        check = false;
+                    }
+                } else if(this.method == "grouprequired") {
+                    var elementsRequired = $('[data-error-grouprequired="' + this.$el.attr('data-error-grouprequired') + '"]');
+                    
+                    elementsRequired.each(function() {
+                        if(!($(this).val() == '' || $(this).val() == $(this).attr('title') == true)) {
+                            check = false;
+                            return;
+                        }
+                        
+                    });
+                } else {
+                    
+                    pattern = patterns[this.method];
+                    
+                    check = (!pattern.test(this.value) && this.value != this.defaultValue);
+                }
+
+                if(check) {
+                    
+                    if(jQuery.inArray(this.errorElement, this.valideasy.activeErrorElements) <= -1) {
+                        this.setError();
+                        this.valideasy.activeErrorElements.push(this.errorElement.attr('id'));
+                    }  
+
+                    return false;  
+
+                } else {
+
+                    if(jQuery.inArray(this.errorElement.attr('id'), this.valideasy.activeErrorElements) <= -1) {
+                        this.unsetError();
+                    }
+
+                }
+            }
+
+        }
+
+        return true;
+    }
 
     /**
      * Add error classes to the field and displays the message.
      */
-    function setError(mode, errorElement, element, method, disableFieldStyle) {
-        displayErrorMessage(mode, errorElement, element, method);
-        if(!disableFieldStyle) {
-            element.addClass('error');
+    elementBeingValidated.prototype.setError = function() {
+        var self = this;
+        this.displayErrorMessage();
+        if(!this.opts.disableFieldStyle) {
+            this.$el.addClass('error');
         }
-        element.bind('focus', function() {
-            unsetError(mode, errorElement, element, disableFieldStyle);
+        this.$el.bind('focus', function() {
+            self.unsetError();
         });
     }
 
     /**
      * Remove error classes and hide messages
      */
-    function unsetError(mode, errorElement, element, disableFieldStyle) {
-        relatedFields = errorElement.attr('data-error-relatedfields');
-    	
+    elementBeingValidated.prototype.unsetError = function() {
+        var relatedFields = this.errorElement.attr('data-error-relatedfields');
+        
         if(relatedFields) {
-            relatedFields = relatedFields.replace(' ' + element.attr('id'), '');
-            errorElement.attr('data-error-relatedfields', relatedFields);
+            relatedFields = relatedFields.replace(' ' + this.$el.attr('id'), '');
+            this.errorElement.attr('data-error-relatedfields', relatedFields);
         }
-    	
+        
         if(!relatedFields || relatedFields == '') {
-            errorElement.fadeOut();
-            errorElement.html('');
+            this.errorElement.fadeOut();
+            this.errorElement.html('');
         }
-    	
-        if(!disableFieldStyle) {
-            element.removeClass('error');
+        
+        if(!this.opts.disableFieldStyle) {
+            this.$el.removeClass('error');
         }
     }
 
-    function getErrorElement(mode, element, errorElementId) {
-        if(element.attr('data-error-fieldid')) {
-            errorElement = $('#'+element.attr('data-error-fieldid'));
+    elementBeingValidated.prototype.displayErrorMessage = function() {
+        
+        if(this.$el.attr('data-error-fieldname')) {
+            elementName = this.$el.attr('data-error-fieldname');
         } else {
-            if(mode == 'single') {
-                errorElementId = element.attr('id')+"_"+errorElementId;
-            }
-            errorElement = $('#'+errorElementId);
-        }
-        return errorElement;
-    }
-
-    function displayErrorMessage(mode, errorElement, element, messageType) {
-    	
-        if(element.attr('data-error-fieldname')) {
-            elementName = element.attr('data-error-fieldname');
-        } else {
-            elementName = element.attr('title');
+            elementName = this.$el.attr('title');
         }
 
-        if(element.attr('data-error-message-'+messageType)) {
-            message = element.attr('data-error-message-'+messageType);
+        if(this.$el.attr('data-error-message-'+this.method)) {
+            message = this.$el.attr('data-error-message-'+this.method);
         } else {
-            message = messages[messageType];
+            message = messages[this.method];
             
-            if(messageType == 'lowerthan'  || messageType == 'greaterthan') {
-                targetElement = $('#' + element.attr('data-error-'+messageType));
+            if(this.method == 'lowerthan'  || this.method == 'greaterthan') {
+                targetElement = $('#' + this.$el.attr('data-error-'+this.method));
                 message = message.replace('{field1}', "<span class='fieldname'>"+elementName+"</span>");
                 message = message.replace('{field2}', "<span class='fieldname'>"+targetElement.attr('title')+"</span>");
             } else {
                 message = message.replace('{field}', "<span class='fieldname'>"+elementName+"</span>");
             }
         }
+
+        relatedFields = (this.errorElement.attr('data-error-relatedfields') != undefined ? this.errorElement.attr('data-error-relatedfields') : '');
+        this.errorElement.attr('data-error-relatedfields', relatedFields + ' ' + this.$el.attr('id'));
         
-        relatedFields = (errorElement.attr('data-error-relatedfields') != undefined ? errorElement.attr('data-error-relatedfields') : '');
-        errorElement.attr('data-error-relatedfields', relatedFields + ' ' + element.attr('id'));
-        
-        if(errorElement.html() != message) {
-            errorElement.fadeIn();
-            errorElement.html(message);
+        if(this.errorElement.html() == '') {
+            this.errorElement.fadeIn();
+            this.errorElement.html(message);
         }
     }
     
@@ -228,5 +291,12 @@
         }
         return string;
     }
+   
+    $.fn.valideasy = function (opts) {
+        var valideasy = new Valideasy(this, opts);
+        valideasy.init();
 
-})(jQuery);
+        return valideasy.isValid();
+    }
+
+})(jQuery, document, window);
