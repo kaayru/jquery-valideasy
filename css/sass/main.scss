@@ -1,0 +1,71 @@
+/** Highlights **/
+
+.highlight {
+	margin: 10px 0;
+}
+
+.panel .highlight {
+	margin: 0;
+
+	pre {
+		border: none;
+		padding: 0;
+		margin: 0;
+	}
+}
+
+/** Errors **/
+
+$errorcolor: #e10000;
+
+
+.example form input {
+  border: 1px solid #ddd;
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+
+.example form input.btn {
+  line-height: 24px;
+  margin-top: -4px;
+}
+
+.example form .form-group {
+  margin-bottom: 0;
+}
+
+.example p.example-title {
+  color: #ccc;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.error-wrapper {
+  min-height: 25px;
+  display: block !important;
+  margin: 0;
+}
+
+.alert-success {
+  display: none;
+}
+
+.alert-success {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.error-wrapper {
+  color: $errorcolor;
+}
+
+.error-wrapper .fieldname {
+  font-weight: bold;
+}
+
+.example input.error,
+.example textarea.error,
+.example select.error {
+  border-color: $errorcolor;
+  color: $errorcolor;
+}

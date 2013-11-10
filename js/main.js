@@ -1,9 +1,8 @@
-$(document).ready(function(){
-    $('.autoclear').each(function() {
-    	$(this).autoClear();
-    });
+$(function() {
+	$('.autoclear').autoClear();
+	$('#topnav a').smoothScroll();
 
-    $('form').submit(function(){
+	$('form').submit(function(){
     	var formIsValid = $(this).valideasy();
 
     	if(formIsValid) {
@@ -13,4 +12,4 @@ $(document).ready(function(){
     	}
     	return false;
 	});
-});
+})

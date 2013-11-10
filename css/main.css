@@ -1,0 +1,78 @@
+/** Highlights **/
+/* line 3, sass/main.scss */
+.highlight {
+  margin: 10px 0;
+}
+
+/* line 7, sass/main.scss */
+.panel .highlight {
+  margin: 0;
+}
+/* line 10, sass/main.scss */
+.panel .highlight pre {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/** Errors **/
+/* line 22, sass/main.scss */
+.example form input {
+  border: 1px solid #ddd;
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+
+/* line 28, sass/main.scss */
+.example form input.btn {
+  line-height: 24px;
+  margin-top: -4px;
+}
+
+/* line 33, sass/main.scss */
+.example form .form-group {
+  margin-bottom: 0;
+}
+
+/* line 37, sass/main.scss */
+.example p.example-title {
+  color: #ccc;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* line 43, sass/main.scss */
+.error-wrapper {
+  min-height: 25px;
+  display: block !important;
+  margin: 0;
+}
+
+/* line 49, sass/main.scss */
+.alert-success {
+  display: none;
+}
+
+/* line 53, sass/main.scss */
+.alert-success {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+/* line 58, sass/main.scss */
+.error-wrapper {
+  color: #e10000;
+}
+
+/* line 62, sass/main.scss */
+.error-wrapper .fieldname {
+  font-weight: bold;
+}
+
+/* line 68, sass/main.scss */
+.example input.error,
+.example textarea.error,
+.example select.error {
+  border-color: #e10000;
+  color: #e10000;
+}
