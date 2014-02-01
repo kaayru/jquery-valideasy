@@ -2,7 +2,7 @@
     Class: valideasy
     Use: Checks wether a submitted form is valid.
     Author: Vincent Ballut
-    Version: 2
+    Version: 2.0.1
     Dependency: jQuery 1.9.1
 ------------------------------------------------------------------------- */
 
@@ -226,7 +226,7 @@
         if(!this.opts.disableFieldStyle) {
             this.$el.addClass('error');
         }
-        this.$el.bind('focus', function() {
+        this.$el.bind('focus change', function() {
             self.unsetError();
         });
     }
