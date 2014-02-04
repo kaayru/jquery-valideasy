@@ -145,7 +145,12 @@
   <span class="nx">disableFieldStyle</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
   <span class="nx">stepByStep</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
   <span class="nx">scrollToFirstError</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-<span class="p">}</span></pre>
+<span class="p">}</span>
+  <span class="nx">onValidateBefore</span><span class="o">:</span> <span class="kc">function() { return; }</span><span class="p">,</span>
+<span class="p">}</span>
+  <span class="nx">onValidateAfter</span><span class="o">:</span> <span class="kc">function() { return; }</span><span class="p">,</span>
+<span class="p">}</span>
+</pre>
       </div>
 
       <h3>mode</h3>
@@ -172,6 +177,12 @@
 
       <h3>scrollToFirstError</h3>
       <p>Set to true to auto scroll to the first error field at the end of the validation process</p>
+      
+      <h3>onValidateBefore</h3>
+      <p>Event called right before the validation process starts</p>
+      
+      <h3>onValidateAfter</h3>
+      <p>Event called right after the validation process ends</p>
 
     </section>
 
