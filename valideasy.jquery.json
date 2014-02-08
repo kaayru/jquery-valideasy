@@ -7,7 +7,7 @@
         "validation",
         "validate"
     ],
-    "version": "1.0.0",
+    "version": "2.2.1",
     "author": {
         "name": "Vincent Ballut",
         "url": "http://www.nobodymuch.com"
@@ -31,6 +31,6 @@
     "demo": "http://kaayru.github.io/jquery-valideasy/",
     "download": "https://github.com/kaayru/jquery-valideasy/archive/master.zip",
     "dependencies": {
-        "jquery": ">=1.5"
+        "jquery": ">=1.9"
     }
 }
