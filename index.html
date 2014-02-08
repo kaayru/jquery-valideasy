@@ -59,6 +59,7 @@
                 <li><a href="#combined_rules">Combined rules</a></li>
                 <li><a href="#unified_errors">Unified errors</a></li>
                 <li><a href="#stepbystep">Stop at first error</a></li>
+                <li><a href="#hooksexample">Post Validation Event</a></li>
               </ul>
             </li>
           </ul>
@@ -176,11 +177,12 @@
       <h3>scrollToFirstError</h3>
       <p>Set to true to auto scroll to the first error field at the end of the validation process</p>
       
-      <h3>onValidateBefore</h3>
-      <p>Event called right before the validation process starts</p>
-      
-      <h3>onValidateAfter</h3>
-      <p>Event called right after the validation process ends</p>
+      <h3>Hooks</h3>
+      <p>As of version 2.2.1, you can hook to pre and post validation events to perform certain tasks. Available hooks are : </p>
+      <ul>
+        <li><strong>onValidateBefore</strong><br />Triggered right before the validation process begins. This hook receives two parameters: the form element being validated, and the array of the plugin options.</li>
+        <li><strong>onValidateAfter</strong><br />Triggered right after the validation process ends. This hook receives three parameters: the form element being validated, the array of the plugin options, and the validation status.</li>
+      </ul>
 
     </section>
 
@@ -626,6 +628,36 @@
         </div>
       </div>
       
+    </section>
+
+    <section id="validationhooks" class="container">
+      <h3>Post Validation Hook</h3>
+
+      <div class="example panel panel-default">
+        <div class="panel-body">
+          <p class="example-title">Example</p>
+          <form id="hooksexample">
+            <div class="form-group">
+              <input type="text" id="example14_name" name="example14_name" class="autoclear required form-control" value="Your Name" title="Your Name"/>
+              <p class="error-wrapper help-block" id="example14_name_errors"></p>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Submit" />
+            <p class="alert alert-success">Valid!</p>
+          </form>
+        </div>
+        <div class="panel-footer">
+          <div class="highlight js"><pre><span class="nx">$</span><span class="p">(</span><span class="k">form</span><span class="p">).</span><span class="nx">valideasy</span><span class="p">({</span>
+    <span class="s1">&#39;onValidateAfter&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">form</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">isValid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">isValid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">form</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.alert-success&#39;</span><span class="p">).</span><span class="nx">fadeIn</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">form</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.alert-success&#39;</span><span class="p">).</span><span class="nx">fadeOut</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+        </div>
+      </div>
     </section>
 
     <hr>

@@ -2,7 +2,7 @@
     Class: valideasy
     Use: Checks wether a submitted form is valid.
     Author: Vincent Ballut
-    Version: 2.1
+    Version: 2.2.1
     Dependency: jQuery 1.9.1
 ------------------------------------------------------------------------- */
 
@@ -64,14 +64,14 @@
             // If form has errors, scroll to the first error section ?
             // Defaults to : false
             scrollToFirstError: false,
-            
+
             // Event triggered before validation
-            onValidateBefore: function() {
+            onValidateBefore: function(form, options) {
                 return;
             },
 
             // Event triggered after validation
-            onValidateAfter: function() {
+            onValidateAfter: function(form, options, isValid) {
                 return;
             }
         };
@@ -84,8 +84,8 @@
     Valideasy.prototype.init = function () {
         this.setParams();
         var self = this;
-        
-        this.opts.onValidateBefore();
+
+        this.opts.onValidateBefore(this.$form, this.opts);
 
         this.$form.find("input:not([type=submit]), select, textarea").each(function() {
             var element = new elementBeingValidated($(this), self);
@@ -97,8 +97,8 @@
             }
 
         });
-        
-        this.opts.onValidateAfter();
+
+        this.opts.onValidateAfter(this.$form, this.opts, !this.formHasError);
 
         if(this.formHasError && this.opts.scrollToFirstError) {            
             $('html,body').animate({
