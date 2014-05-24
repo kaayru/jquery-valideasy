@@ -9,3 +9,7 @@ Change Log
 
 2.2.1 - Feb 08, 2014
 - Added pre and post validation hooks "onValidateBefore" and "onValidateAfter"
+
+2.2.2 - May 24, 2014
+- New validation rule: passwordcheck
+- New option: singleFieldValidation
