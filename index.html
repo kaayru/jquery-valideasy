@@ -138,6 +138,8 @@
 
       <p>Here is the full (but short) list of available parameters, along with their default values. To use them as <code>data-</code> attributes, simply prefix with <code>data-valideasy-</code></p>
 
+      <p><span class="label label-primary">Note</span> Parameters expecting functions cannot be used as <code>data-</code> attributes.</p>
+
 
       <div class="highlight highlight-javascript">
         <pre><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span>
@@ -146,6 +148,7 @@
   <span class="nx">disableFieldStyle</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
   <span class="nx">stepByStep</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
   <span class="nx">scrollToFirstError</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">singleFieldValidation</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
   <span class="nx">onValidateBefore</span><span class="o">:</span> <span class="kc">function() { return; }</span><span class="p">,</span>
   <span class="nx">onValidateAfter</span><span class="o">:</span> <span class="kc">function() { return; }</span><span class="p">,</span>
 <span class="p">}</span>
@@ -176,6 +179,10 @@
 
       <h3>scrollToFirstError</h3>
       <p>Set to true to auto scroll to the first error field at the end of the validation process</p>
+
+      <h3>singleFieldValidation</h3>
+      <p>Set to true to only perform validation on one field, instead of on the entire form.<br />
+      For this to work, Valideasy must be instantiated on a field element.</p>
       
       <h3>Hooks</h3>
       <p>As of version 2.2.1, you can hook to pre and post validation events to perform certain tasks. Available hooks are : </p>
@@ -219,7 +226,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form role="form">
+          <form role="form" class="basic-example">
             <div class="form-group">
               <input type="text" id="example1_name" name="example1_name" class="form-control autoclear required" value="Your name" title="Your name" />
               <p class="error-wrapper help-block" id="example1_name_errors"></p>
@@ -255,7 +262,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form role="form">
+          <form role="form" class="basic-example">
             <div class="form-group">
               <input type="text" id="example2_email" name="example2_email" class="form-control autoclear email required" value="Your email" title="Your email" />
               <p class="error-wrapper help-block" id="example2_email_errors"></p>
@@ -276,7 +283,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form role="form">
+          <form role="form" class="basic-example">
             <div class="form-group">
               <input type="text" id="example3_phone" name="example3_phone" class="autoclear required phone form-control" value="Your phone" title="Your phone" />
               <p class="error-wrapper help-block" id="example3_phone_errors"></p>
@@ -298,7 +305,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form role="form">
+          <form role="form" class="basic-example">
             <div class="form-group">
               <input type="text" id="example4_number" name="example4_number" class="autoclear required number form-control" value="Price" title="Price" />
               <p class="error-wrapper help-block" id="example4_number_errors"></p>
@@ -319,7 +326,7 @@
         <div class="example panel panel-default">
           <div class="panel-body">
             <p class="example-title">Example</p>
-            <form role="form">
+            <form role="form" class="basic-example">
               <div class="form-group">
                 <input type="text" id="example5_digits" name="example5_digits" class="autoclear required integer form-control" value="Your age" title="Your age" />
                 <p class="error-wrapper help-block" id="example5_digits_errors"></p>
@@ -340,7 +347,7 @@
         <div class="example panel panel-default">
           <div class="panel-body">
             <p class="example-title">Example</p>
-            <form role="form">
+            <form role="form" class="basic-example">
               <div class="form-group">
                 <input type="text" id="example6_url" name="example6_url" class="autoclear required url form-control" value="Website" title="Website" />
                 <p class="error-wrapper help-block" id="example6_url_errors"></p>
@@ -360,7 +367,7 @@
         <div class="example panel panel-default">
           <div class="panel-body">
             <p class="example-title">Example</p>
-            <form role="form">
+            <form role="form" class="basic-example">
               <div class="form-group">
                 <input type="text" id="example7_zipcode" name="example7_zipcode" class="autoclear required zip form-control" value="Zipcode" title="Zipcode"/>
                 <p class="error-wrapper help-block" id="example7_zipcode_errors"></p>
@@ -376,6 +383,35 @@
           </div>
         </div>
 
+        <h3>Password Verification</h3>
+        <div class="example panel panel-default">
+          <div class="panel-body">
+            <p class="example-title">Example</p>
+            <form role="form" class="basic-example">
+              <div class="form-group">
+
+                <label for="example15_passwordcheck">Enter Password:</label>
+                <input type="password" id="example15_passwordcheck" name="example15_passwordcheck" class="autoclear required form-control" value="" title="Password" data-error-fieldid="password_errors"/><br />
+
+                <label for="example15_passwordcheck">Enter Password again:</label>
+                <input type="password" id="example15_passwordcheck_retype" name="example15_passwordcheck_retype" class="autoclear passwordcheck form-control" value="" title="Password" data-error-passwordcheck="example15_passwordcheck" data-error-fieldid="password_errors"/>
+
+                <p class="error-wrapper help-block" id="password_errors"></p>
+
+              </div>
+              <input type="submit" class="btn btn-primary" value="Submit" />
+              <p class="alert alert-success">Valid!</p>
+            </form>
+          </div>
+          <div class="panel-footer">
+            <div class="highlight">
+<pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;password&quot;</span> <span class="na">id=</span><span class="s">&quot;password&quot;</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span> <span class="na">class=</span><span class="s">&quot;required&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;password&quot;</span> <span class="na">id=</span><span class="s">&quot;passwordcheck&quot;</span> <span class="na">name=</span><span class="s">&quot;passwordcheck&quot;</span> <span class="na">class=</span><span class="s">&quot;passwordcheck&quot;</span> <span class="na">data-error-passwordcheck=</span><span class="s">&quot;password&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+          </div>
+        </div>
+
         <h3>At least one field required</h3>
         <p>Allows to specifiy that, in a set of fields, at least one is required. All of the fields in the set must have the same <code>data-error-grouprequired</code> attribute.</p>
 
@@ -384,7 +420,7 @@
         <div class="example panel panel-default">
           <div class="panel-body">
             <p class="example-title">Example</p>
-            <form role="form">
+            <form role="form" class="basic-example">
               <div class="form-group">
                 <input class="autoclear grouprequired" id="example8_areamin" name="example8_areamin" title="Mininum Area" type="text" value="Mininum Area" data-error-grouprequired="area" data-error-fieldid="area_errors" />
                 <input class="autoclear grouprequired" id="example8_areamax" name="example8_areamax" title="Maximum Area" type="text" value="Maximum Area" data-error-grouprequired="area" data-error-fieldid="area_errors" />
@@ -413,7 +449,7 @@
         <div class="example panel panel-default">
           <div class="panel-body">
             <p class="example-title">Example</p>
-            <form role="form">
+            <form role="form" class="basic-example">
               <div class="form-group">
                 <input class="autoclear lowerthan" id="example9_pricemin" name="example9_pricemin" title="Mininum Price" type="text" value="Mininum Price" data-error-lowerthan="example9_pricemax" data-error-fieldid="price_errors" />
               <input class="autoclear" id="example9_pricemax" name="example9_pricemax" title="Maximum Price" type="text" value="Maximum Price" />
@@ -473,7 +509,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form>
+          <form  class="basic-example">
             <div class="form-group">
               <input type="text" id="example10_name" name="example10_name" class="autoclear required form-control" value="Your Name" title="Your Name" data-error-fieldname="Name"/>
               <p class="error-wrapper help-block" id="example10_name_errors"></p>
@@ -499,7 +535,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form>
+          <form class="basic-example">
             <div class="form-group">
               <input type="text" id="example11_name" name="example11_name" class="autoclear required form-control" value="Your Name" title="Your Name" data-error-message-required="This field is really required. Fill it! Or get lost..."/>
               <p class="error-wrapper help-block" id="example11_name_errors"></p>
@@ -527,7 +563,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form>
+          <form class="basic-example">
             <div class="form-group">
               <input class="autoclear lowerthan grouprequired number" id="example12_pricemin" name="example12_pricemin" title="Mininum Price" type="text" value="Mininum Price" data-error-lowerthan="example12_pricemax" data-error-fieldid="priceminmax_errors" data-error-grouprequired="priceminmax"/>
               <input class="autoclear grouprequired number" id="example12_pricemax" name="example12_pricemax" title="Maximum Price" type="text" value="Maximum Price" data-error-fieldid="priceminmax_errors" data-error-grouprequired="priceminmax" />
@@ -555,7 +591,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form data-valideasy-mode="unified" data-valideasy-errorelementid="example13_errors">
+          <form  class="basic-example" data-valideasy-mode="unified" data-valideasy-errorelementid="example13_errors">
             <div class="form-group">
               <input class="autoclear required" id="example13_name" name="example13_name" title="Name" type="text" value="Name" />
               <input class="autoclear required email" id="example13_email" name="example13_email" title="Email" type="text" value="Email" />
@@ -590,7 +626,7 @@
       <div class="example panel panel-default">
         <div class="panel-body">
           <p class="example-title">Example</p>
-          <form data-valideasy-stepbystep="1">
+          <form class="basic-example" data-valideasy-stepbystep="1">
             <div class="form-group">
               <input type="text" id="example14_name" name="example14_name" class="autoclear required form-control" value="Your Name" title="Your Name"/>
               <p class="error-wrapper help-block" id="example14_name_errors"></p>
@@ -643,6 +679,7 @@
             </div>
             <input type="submit" class="btn btn-primary" value="Submit" />
             <p class="alert alert-success">Valid!</p>
+            <p><br /><span class="label label-primary">Note</span> Open console to take a look at parameters passed to the function</p>
           </form>
         </div>
         <div class="panel-footer">
@@ -660,8 +697,42 @@
       </div>
     </section>
 
+    <section id="singlefieldvalidation" class="container">
+      <h3>Single Field Validation + Live Validation</h3>
+
+      <div class="example panel panel-default">
+        <div class="panel-body">
+          <p class="example-title">Example</p>
+          <form id="singlefieldvalidationexample" class="basic-example">
+            <div class="form-group">
+              <input type="text" id="example16_name" name="example16_name" class="autoclear required form-control" value="Your Name" title="Your Name"/>
+              <p class="error-wrapper help-block" id="example16_name_errors"></p>
+            </div>
+
+            <div class="form-group">
+              <input type="text" id="example16_email" name="example16_email" class="autoclear required email form-control" value="Your Email" title="Your Email"/>
+              <p class="error-wrapper help-block" id="example16_email_errors"></p>
+            </div>
+
+            <input type="submit" class="btn btn-primary" value="Submit" />
+            <p class="alert alert-success">Valid!</p>
+          </form>
+        </div>
+        <div class="panel-footer">
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form input[type=&quot;text&quot;]&#39;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;blur&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">fieldIsValid</span> <span class="o">=</span>  <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">valideasy</span><span class="p">({</span>
+            <span class="s1">&#39;singleFieldValidation&#39;</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
+
+        </div>
+      </div>
+    </section>
+
     <hr>
-    <div class="container"
+    <div class="container">
       <footer>
         <p>jQuery Valideasy is maintained by <a href="https://github.com/kaayru" title="Vincent Ballut on Github">Vincent Ballut</a></p>
       </footer>
@@ -673,7 +744,7 @@
         <script src="js/plugins.js"></script>
         <script src="js/vendor/jquery-smoothscroll.js"></script>
         <script src="js/vendor/jquery-autoclear.js"></script>
-        <script src="js/jquery-valideasy.js"></script>
+        <script src="js/jquery-valideasy-2.2.2.js"></script>
         <script src="js/main.js"></script>
     </body>
 </html>
